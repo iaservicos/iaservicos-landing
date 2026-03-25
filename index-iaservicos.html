@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA Serviços - Positivo Tecnologia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1a2332 0%, #2d3e50 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: rgba(26, 35, 50, 0.95);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: #ffffff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            color: #1a2332;
+            font-size: 1.2rem;
+        }
+
+        nav a {
+            color: #b0b0b0;
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover {
+            color: #2563eb;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: #b0b0b0;
+            margin-bottom: 2rem;
+        }
+
+        .hero-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .hero-features li {
+            padding: 0.5rem 0;
+            color: #90ee90;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .hero-features li:before {
+            content: "✓";
+            font-weight: bold;
+            color: #2563eb;
+            font-size: 1.2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .hero-image {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+            border-radius: 12px;
+            padding: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            border: 1px solid rgba(37, 99, 235, 0.2);
+        }
+
+        .hero-image-content {
+            text-align: center;
+        }
+
+        .hero-image-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Services Section */
+        .services {
+            background: rgba(45, 62, 80, 0.5);
+            padding: 4rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .services-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: #ffffff;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: rgba(26, 35, 50, 0.6);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover {
+            border-color: rgba(37, 99, 235, 0.5);
+            background: rgba(26, 35, 50, 0.8);
+            transform: translateY(-5px);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-card h3 {
+            color: #ffffff;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .service-card p {
+            color: #b0b0b0;
+            font-size: 0.95rem;
+        }
+
+        /* Projects Section */
+        .projects {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .project-card {
+            background: rgba(45, 62, 80, 0.6);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            border-color: rgba(37, 99, 235, 0.5);
+            transform: translateY(-5px);
+        }
+
+        .project-header {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%);
+            padding: 2rem;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-card h3 {
+            color: #ffffff;
+            padding: 0 1.5rem;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-card p {
+            color: #b0b0b0;
+            padding: 0 1.5rem 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .project-button {
+            display: block;
+            background: #2563eb;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            margin: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .project-button:hover {
+            background: #1e40af;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: rgba(45, 62, 80, 0.5);
+            padding: 4rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-content {
+            background: rgba(26, 35, 50, 0.6);
+            padding: 3rem;
+            border-radius: 12px;
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+
+        .contact-content p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: #b0b0b0;
+        }
+
+        .contact-email {
+            font-size: 1.3rem;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .contact-email:hover {
+            color: #1e40af;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(26, 35, 50, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            color: #ffffff;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: #b0b0b0;
+            text-decoration: none;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .footer-section a:hover {
+            color: #2563eb;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            text-align: center;
+            color: #707070;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 3rem 1rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav a {
+                margin-left: 1rem;
+                font-size: 0.85rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">IA</div>
+                <span>IA Serviços</span>
+            </a>
+            <nav>
+                <a href="#sobre">Sobre</a>
+                <a href="#servicos">Serviços</a>
+                <a href="#projetos">Projetos</a>
+                <a href="#contato">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="sobre">
+        <div class="hero-content">
+            <h1>IA Serviços</h1>
+            <p>Soluções inteligentes para sua empresa</p>
+            <ul class="hero-features">
+                <li>Tecnologia de ponta</li>
+                <li>Suporte 24/7</li>
+                <li>Integração com sistemas existentes</li>
+            </ul>
+            <a href="https://portalhaas.iaservicos.online" class="cta-button">Acessar Portal de Vistoria</a>
+        </div>
+        <div class="hero-image">
+            <div class="hero-image-content">
+                <div class="hero-image-icon">🚀</div>
+                <p style="color: #b0b0b0;">Plataforma de Serviços</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="servicos">
+        <div class="services-container">
+            <h2 class="section-title">Nossos Serviços</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">📊</div>
+                    <h3>Análise de Dados</h3>
+                    <p>Processamento e análise inteligente de dados para tomada de decisão estratégica.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🔍</div>
+                    <h3>Vistoria Inteligente</h3>
+                    <p>Sistema automatizado de vistoria de equipamentos com relatórios em tempo real.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🤖</div>
+                    <h3>Automação</h3>
+                    <p>Automação de processos com inteligência artificial para maior eficiência.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">💡</div>
+                    <h3>Consultoria</h3>
+                    <p>Consultoria especializada em implementação de soluções tecnológicas.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🔐</div>
+                    <h3>Segurança</h3>
+                    <p>Proteção de dados e segurança de informações com padrões internacionais.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🌐</div>
+                    <h3>Integração</h3>
+                    <p>Integração com sistemas existentes e plataformas de terceiros.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects" id="projetos">
+        <h2 class="section-title">Nossos Projetos</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-header">📋</div>
+                <h3>Portal HaaS</h3>
+                <p>Sistema completo de vistoria de equipamentos com gerenciamento centralizado, relatórios em tempo real e integração com GPTMaker.</p>
+                <a href="https://portalhaas.iaservicos.online" class="project-button">Acessar Projeto</a>
+            </div>
+            <div class="project-card">
+                <div class="project-header">🔄</div>
+                <h3>Em Desenvolvimento</h3>
+                <p>Novos projetos e soluções estão em desenvolvimento. Fique atento para as próximas atualizações e lançamentos.</p>
+                <a href="#contato" class="project-button">Saiba Mais</a>
+            </div>
+            <div class="project-card">
+                <div class="project-header">⭐</div>
+                <h3>Próximas Soluções</h3>
+                <p>Estamos trabalhando em soluções inovadoras para expandir nosso portfólio de serviços e atender novas demandas.</p>
+                <a href="#contato" class="project-button">Fale Conosco</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contato">
+        <div class="contact-container">
+            <h2 class="section-title">Entre em Contato</h2>
+            <div class="contact-content">
+                <p>Tem dúvidas ou gostaria de conhecer melhor nossas soluções?</p>
+                <p>Entre em contato conosco:</p>
+                <a href="mailto:iaservicos@positivotecnologia.com.br" class="contact-email">
+                    iaservicos@positivotecnologia.com.br
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>IA Serviços</h4>
+                <p>Soluções inteligentes para sua empresa</p>
+                <p>© 2026 IA Serviços - Positivo Tecnologia</p>
+            </div>
+            <div class="footer-section">
+                <h4>Links Rápidos</h4>
+                <a href="#sobre">Sobre</a><br>
+                <a href="#servicos">Serviços</a><br>
+                <a href="#projetos">Projetos</a><br>
+                <a href="#contato">Contato</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contato</h4>
+                <p>Email: <a href="mailto:iaservicos@positivotecnologia.com.br">iaservicos@positivotecnologia.com.br</a></p>
+                <p>Empresa: Positivo Tecnologia</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 IA Serviços. Todos os direitos reservados. | Desenvolvido com ❤️ pela Positivo Tecnologia</p>
+        </div>
+    </footer>
+</body>
+</html>
