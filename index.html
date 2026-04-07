@@ -433,7 +433,7 @@
     SUPABASE_PUBLISHABLE_KEY: window.APP_CONFIG?.SUPABASE_PUBLISHABLE_KEY || '',
     refreshSeconds: 3,
     liveIntervalMs: 3200,
-    maxKeywordsToShow: 20 
+    maxKeywordsToShow: 10
   };
 
   const el = {
@@ -552,7 +552,7 @@
     const totalCount = ranking.reduce((sum, item) => sum + Number(item.quantidade || 0), 0) || 1;
     const maxCount = Math.max(...ranking.map(item => Number(item.quantidade || 0)), 1);
     const count = ranking.length;
-    const gap = 10;
+    const gap = 8;
     const containerWidth = Math.max(el.keywordsContainer.clientWidth || 0, 320);
     const containerHeight = Math.max(el.keywordsContainer.clientHeight || 0, 220);
     const aspectRatio = containerWidth / Math.max(containerHeight, 1);
@@ -560,8 +560,8 @@
     const rows = Math.max(1, Math.ceil(count / columns));
     const cellWidth = (containerWidth - gap * (columns - 1)) / columns;
     const cellHeight = (containerHeight - gap * (rows - 1)) / rows;
-    const maxDiameter = Math.max(54, Math.min(cellWidth, cellHeight) * 0.95);
-    const minDiameter = Math.max(42, maxDiameter * 0.58);
+    const maxDiameter = Math.max(70, Math.min(cellWidth, cellHeight) * 1.06);
+    const minDiameter = Math.max(54, maxDiameter * 0.68);
 
     el.keywordsStatus.textContent = `${ranking.length} palavras em destaque.`;
 
