@@ -11,21 +11,24 @@
     }
 
     .keywords-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
+      display: grid;
+      justify-items: center;
+      align-items: center;
       gap: 12px;
       margin-bottom: 16px;
-      flex-wrap: wrap;
+      text-align: center;
     }
 
     .keywords-bubbles {
       display: flex;
       flex-wrap: wrap;
-      gap: 14px;
+      gap: 10px;
       align-items: center;
       justify-content: center;
-      min-height: 210px;
+      align-content: center;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
     }
 
     .keyword-bubble {
@@ -37,7 +40,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 14px;
+      padding: clamp(8px, calc(var(--bubble-size) / 10), 14px);
       text-align: center;
       background:
         radial-gradient(circle at 30% 25%, rgba(255,255,255,0.28), transparent 28%),
@@ -45,16 +48,6 @@
       border: 1px solid rgba(255,255,255,0.12);
       box-shadow: 0 12px 24px rgba(0,0,0,0.18), inset 0 0 24px rgba(255,255,255,0.05);
       overflow: hidden;
-      animation: bubbleFloat 6s ease-in-out infinite;
-    }
-
-    .keyword-bubble:nth-child(2n) { animation-delay: .8s; }
-    .keyword-bubble:nth-child(3n) { animation-delay: 1.4s; }
-    .keyword-bubble:nth-child(4n) { animation-delay: .4s; }
-
-    @keyframes bubbleFloat {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-6px) scale(1.03); }
     }
 
     .bubble-inner {
@@ -66,18 +59,18 @@
     }
 
     .bubble-topic {
-      font-size: clamp(12px, calc(var(--bubble-size) / 8), 18px);
+      font-size: clamp(9px, calc(var(--bubble-size) / 9), 18px);
       font-weight: 800;
       word-break: break-word;
     }
 
     .bubble-percent {
-      font-size: clamp(11px, calc(var(--bubble-size) / 12), 14px);
+      font-size: clamp(9px, calc(var(--bubble-size) / 12), 14px);
       color: var(--muted);
     }
 
     .bubble-count {
-      font-size: clamp(11px, calc(var(--bubble-size) / 14), 13px);
+      font-size: clamp(9px, calc(var(--bubble-size) / 14), 13px);
       font-weight: 700;
       color: rgba(255,255,255,0.92);
     }
@@ -163,11 +156,19 @@
     }
 
     .main-column {
-      grid-template-rows: 1fr 1fr;
+      grid-template-rows: 60% 40%;
     }
 
     .side-column {
       grid-template-rows: auto 1fr;
+    }
+
+    .side-column .stat {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
     .stat {
@@ -202,18 +203,33 @@
 
     .preview-card {
       padding: 14px;
-      overflow: hidden;
+      overflow: visible;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .preview-image {
       width: 100%;
-      height: 100%;
+      height: auto;
+      max-height: calc(100% - 40px);
+      flex: 1;
+      min-height: 0;
       min-height: 260px;
       display: block;
-      object-fit: cover;
+      object-fit: contain;
       border-radius: 16px;
       border: 1px solid rgba(255,255,255,0.10);
       box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+    }
+
+    .preview-contact {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: .2px;
     }
 
     .keywords-card,
@@ -367,7 +383,6 @@
           <div class="keywords-head">
             <div>
               <div class="panel-title">Palavras-chave mais citadas</div>
-              <div class="panel-subtitle">Top 15 por volume, com o tamanho da bolha variando conforme a participação.</div>
             </div>
             <div class="status" id="keywordsStatus">Lendo palavras-chave...</div>
           </div>
@@ -381,7 +396,7 @@
           <div class="panel-head">
             <div>
               <div class="panel-title">Mensagens em live</div>
-              <div class="panel-subtitle">Uma por vez, sem mostrar horário de atualização.</div>
+              
             </div>
             <div class="status" id="statusText">Aguardando leitura...</div>
           </div>
@@ -403,7 +418,8 @@
         </div>
 
         <div class="card preview-card">
-          <img class="preview-image" src="./Imagem1.jpg" alt="Imagem do painel IA Servicos" />
+          <img class="preview-image" src="./foto.jpeg" alt="Imagem do painel IA Servicos" />
+          <div class="preview-contact">+55 41 99269-5939</div>
         </div>
       </div>
     </div>
@@ -417,22 +433,26 @@
     SUPABASE_PUBLISHABLE_KEY: window.APP_CONFIG?.SUPABASE_PUBLISHABLE_KEY || '',
     refreshSeconds: 3,
     liveIntervalMs: 3200,
-    maxKeywordsToShow: 15
+    maxKeywordsToShow: 20 
   };
 
   const el = {
     totalResponses: document.getElementById('totalResponses'),
     responsesContainer: document.getElementById('responsesContainer'),
     statusText: document.getElementById('statusText'),
+    liveMessageKicker: document.getElementById('liveMessageKicker'),
+    liveMessageText: document.getElementById('liveMessageText'),
     keywordsContainer: document.getElementById('keywordsContainer'),
     keywordsStatus: document.getElementById('keywordsStatus')
   };
 
   let refreshTimer = null;
   let liveTimer = null;
+  let resizeTimer = null;
   let loading = false;
   let lastHash = '';
   let lastKeywordsHash = '';
+  let lastKeywordsData = [];
   let liveMessages = [];
   let liveIndex = 0;
   let supabaseClient = null;
@@ -530,13 +550,26 @@
     }
 
     const totalCount = ranking.reduce((sum, item) => sum + Number(item.quantidade || 0), 0) || 1;
+    const maxCount = Math.max(...ranking.map(item => Number(item.quantidade || 0)), 1);
+    const count = ranking.length;
+    const gap = 10;
+    const containerWidth = Math.max(el.keywordsContainer.clientWidth || 0, 320);
+    const containerHeight = Math.max(el.keywordsContainer.clientHeight || 0, 220);
+    const aspectRatio = containerWidth / Math.max(containerHeight, 1);
+    const columns = Math.max(1, Math.ceil(Math.sqrt(count * aspectRatio)));
+    const rows = Math.max(1, Math.ceil(count / columns));
+    const cellWidth = (containerWidth - gap * (columns - 1)) / columns;
+    const cellHeight = (containerHeight - gap * (rows - 1)) / rows;
+    const maxDiameter = Math.max(54, Math.min(cellWidth, cellHeight) * 0.95);
+    const minDiameter = Math.max(42, maxDiameter * 0.58);
 
     el.keywordsStatus.textContent = `${ranking.length} palavras em destaque.`;
 
     el.keywordsContainer.innerHTML = ranking.map((item, index) => {
       const count = Number(item.quantidade || 0);
       const percent = (count / totalCount) * 100;
-      const bubbleSize = Math.max(84, Math.min(84 + (percent * 2.3), 190));
+      const strength = Math.sqrt(count / maxCount);
+      const bubbleSize = minDiameter + ((maxDiameter - minDiameter) * strength);
       const opacity = Math.max(0.18, Math.min(0.18 + (percent / 140), 0.42));
 
       return `
@@ -549,6 +582,15 @@
         </div>
       `;
     }).join('');
+  }
+
+  function onKeywordsResize() {
+    if (!lastKeywordsData.length) return;
+    if (resizeTimer) clearTimeout(resizeTimer);
+
+    resizeTimer = setTimeout(() => {
+      renderKeywords(lastKeywordsData);
+    }, 120);
   }
 
   function showLiveMessage(message, position, total) {
@@ -607,11 +649,12 @@
       const keywordsHash = JSON.stringify((keywords || []).map(item => `${item.topico || ''}-${item.quantidade || 0}`));
       const changed = hash !== lastHash;
       lastHash = hash;
+      lastKeywordsData = keywords || [];
 
       updateDash(filledItems);
       if (keywordsHash !== lastKeywordsHash) {
         lastKeywordsHash = keywordsHash;
-        renderKeywords(keywords);
+        renderKeywords(lastKeywordsData);
       }
       startLiveRotation(filledItems);
 
@@ -637,6 +680,7 @@
 
   loadData();
   startAutoRefresh();
+  window.addEventListener('resize', onKeywordsResize);
 </script>
 </body>
 </html>
