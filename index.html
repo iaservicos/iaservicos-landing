@@ -7,7 +7,7 @@
   <style>
     .keywords-card {
       padding: 22px;
-      margin-bottom: 16px;
+      margin-bottom: 0;
     }
 
     .keywords-head {
@@ -22,17 +22,18 @@
     .keywords-bubbles {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
       align-items: center;
-      justify-content: center;
-      align-content: center;
+      justify-content: space-between;
+      align-content: space-between;
       flex: 1;
       min-height: 0;
-      overflow: hidden;
+      overflow: visible;
+      padding: 4px 2px;
     }
 
     .keyword-bubble {
-      --bubble-size: 90px;
+      --bubble-size: 112px;
       --bubble-opacity: 0.18;
       width: var(--bubble-size);
       height: var(--bubble-size);
@@ -59,18 +60,18 @@
     }
 
     .bubble-topic {
-      font-size: clamp(9px, calc(var(--bubble-size) / 9), 18px);
+      font-size: clamp(11px, calc(var(--bubble-size) / 7.4), 22px);
       font-weight: 800;
       word-break: break-word;
     }
 
     .bubble-percent {
-      font-size: clamp(9px, calc(var(--bubble-size) / 12), 14px);
+      font-size: clamp(10px, calc(var(--bubble-size) / 9.8), 16px);
       color: var(--muted);
     }
 
     .bubble-count {
-      font-size: clamp(9px, calc(var(--bubble-size) / 14), 13px);
+      font-size: clamp(10px, calc(var(--bubble-size) / 10.8), 15px);
       font-weight: 700;
       color: rgba(255,255,255,0.92);
     }
@@ -142,7 +143,8 @@
 
     .stacked-sections {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(280px, 30%);
+      grid-template-columns: minmax(0, 1fr) minmax(220px, 24%);
+      grid-template-rows: 66% 34%;
       gap: 16px;
       flex: 1;
       min-height: 0;
@@ -150,17 +152,22 @@
 
     .main-column,
     .side-column {
-      display: grid;
-      gap: 16px;
       min-height: 0;
     }
 
     .main-column {
-      grid-template-rows: 60% 40%;
+      grid-column: 1;
+      grid-row: 2;
     }
 
     .side-column {
-      grid-template-rows: auto 1fr;
+      grid-column: 2;
+      grid-row: 2;
+    }
+
+    .top-keywords {
+      grid-column: 1 / -1;
+      grid-row: 1;
     }
 
     .side-column .stat {
@@ -169,26 +176,71 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 10px;
+      height: 100%;
+    }
+
+    .main-column .live-card {
+      height: 100%;
     }
 
     .stat {
-      padding: 16px 20px;
-      min-height: 110px;
+      padding: 14px 16px;
+      min-height: 90px;
     }
 
     .stat-label {
-      font-size: 12px;
+      font-size: 11px;
       text-transform: uppercase;
       letter-spacing: .6px;
       color: var(--muted);
-      margin-bottom: 10px;
+      margin-bottom: 8px;
+    }
+
+    .stat-group {
+      display: grid;
+      justify-items: center;
+      gap: 4px;
+    }
+
+    .stat-group .stat-label,
+    .stat-group .stat-value {
+      margin: 0;
     }
 
     .stat-value {
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 800;
       line-height: 1;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
+    }
+
+    .stat-keywords {
+      display: inline-flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .stat-phone {
+      margin-top: 6px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: .2px;
+    }
+
+    .stat-keywords-label {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .stat-keywords-value {
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 800;
     }
 
     .stat-desc {
@@ -199,37 +251,6 @@
 
     .stat-desc.hidden {
       display: none;
-    }
-
-    .preview-card {
-      padding: 14px;
-      overflow: visible;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .preview-image {
-      width: 100%;
-      height: auto;
-      max-height: calc(100% - 40px);
-      flex: 1;
-      min-height: 0;
-      min-height: 260px;
-      display: block;
-      object-fit: contain;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.10);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
-    }
-
-    .preview-contact {
-      margin-top: 10px;
-      text-align: center;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: .2px;
     }
 
     .keywords-card,
@@ -253,6 +274,10 @@
       font-size: 22px;
       font-weight: 800;
       letter-spacing: -.3px;
+    }
+
+    .live-card .panel-title {
+      font-size: 18px;
     }
 
     .panel-subtitle,
@@ -281,7 +306,7 @@
     }
 
     .live-message {
-      width: min(760px, 100%);
+      width: min(1100px, 100%);
       padding: 26px 28px;
       border-radius: 24px;
       background: rgba(255,255,255,0.06);
@@ -306,7 +331,7 @@
     }
 
     .live-text {
-      font-size: clamp(24px, 3vw, 38px);
+      font-size: clamp(17px, 2.1vw, 27px);
       line-height: 1.38;
       font-weight: 800;
       letter-spacing: -.4px;
@@ -342,15 +367,19 @@
 
       .stacked-sections {
         grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+      }
+
+      .top-keywords,
+      .main-column,
+      .side-column {
+        grid-column: 1;
+        grid-row: auto;
       }
 
       .keywords-card,
       .live-card {
         min-height: auto;
-      }
-
-      .side-column {
-        grid-template-rows: auto auto;
       }
     }
 
@@ -370,7 +399,7 @@
       }
 
       .live-text {
-        font-size: 22px;
+        font-size: 17px;
       }
     }
   </style>
@@ -378,20 +407,20 @@
 <body>
   <main class="page">
     <div class="stacked-sections">
-      <div class="main-column">
-        <div class="card keywords-card">
-          <div class="keywords-head">
-            <div>
-              <div class="panel-title">Palavras-chave mais citadas</div>
-            </div>
-            <div class="status" id="keywordsStatus">Lendo palavras-chave...</div>
+      <div class="card keywords-card top-keywords">
+        <div class="keywords-head">
+          <div>
+            <div class="panel-title">Palavras-chave mais citadas</div>
           </div>
-
-          <div id="keywordsContainer" class="keywords-bubbles">
-            <div class="loading">Carregando palavras-chave...</div>
-          </div>
+          <div class="status" id="keywordsStatus">Lendo palavras-chave...</div>
         </div>
 
+        <div id="keywordsContainer" class="keywords-bubbles">
+          <div class="loading">Carregando palavras-chave...</div>
+        </div>
+      </div>
+
+      <div class="main-column">
         <div class="card live-card">
           <div class="panel-head">
             <div>
@@ -412,15 +441,20 @@
 
       <div class="side-column">
         <div class="card stat">
-          <div class="stat-label">Mensagens recebidas</div>
-          <div class="stat-value" id="totalResponses">0</div>
+          <div class="stat-group">
+            <div class="stat-label">Mensagens recebidas</div>
+            <div class="stat-value" id="totalResponses">0</div>
+          </div>
+
+          <div class="stat-group">
+            <div class="stat-label">Palavras-chave</div>
+            <div class="stat-value" id="keywordsCount">0</div>
+          </div>
+
+          <div class="stat-phone">(41)99157-7161</div>
           <div class="stat-desc hidden">Linhas preenchidas na coluna Mensagem.</div>
         </div>
 
-        <div class="card preview-card">
-          <img class="preview-image" src="./foto.jpeg" alt="Imagem do painel IA Servicos" />
-          <div class="preview-contact">+55 41 99269-5939</div>
-        </div>
       </div>
     </div>
   </main>
@@ -438,6 +472,7 @@
 
   const el = {
     totalResponses: document.getElementById('totalResponses'),
+    keywordsCount: document.getElementById('keywordsCount'),
     responsesContainer: document.getElementById('responsesContainer'),
     statusText: document.getElementById('statusText'),
     liveMessageKicker: document.getElementById('liveMessageKicker'),
@@ -518,17 +553,29 @@
   async function fetchKeywords() {
     ensureSupabase();
 
-    const { data, error } = await supabaseClient
-      .from('palavras_chave')
-      .select('topico, quantidade, data_atualizacao')
-      .order('quantidade', { ascending: false })
-      .limit(CONFIG.maxKeywordsToShow);
+    const [rankingResult, totalResult] = await Promise.all([
+      supabaseClient
+        .from('palavras_chave')
+        .select('topico, quantidade, data_atualizacao')
+        .order('quantidade', { ascending: false })
+        .limit(CONFIG.maxKeywordsToShow),
+      supabaseClient
+        .from('palavras_chave')
+        .select('topico', { count: 'exact', head: true })
+    ]);
 
-    if (error) {
-      throw new Error(`Erro ao ler palavras-chave: ${error.message}`);
+    if (rankingResult.error) {
+      throw new Error(`Erro ao ler palavras-chave: ${rankingResult.error.message}`);
     }
 
-    return data || [];
+    if (totalResult.error) {
+      throw new Error(`Erro ao contar palavras-chave: ${totalResult.error.message}`);
+    }
+
+    return {
+      ranking: rankingResult.data || [],
+      totalKeywords: Number(totalResult.count || 0)
+    };
   }
 
   function getFilledItems(items) {
@@ -556,14 +603,14 @@
     const containerWidth = Math.max(el.keywordsContainer.clientWidth || 0, 320);
     const containerHeight = Math.max(el.keywordsContainer.clientHeight || 0, 220);
     const aspectRatio = containerWidth / Math.max(containerHeight, 1);
-    const columns = Math.max(1, Math.ceil(Math.sqrt(count * aspectRatio)));
+    const columns = Math.max(1, Math.round(Math.sqrt(count * aspectRatio * 0.82)));
     const rows = Math.max(1, Math.ceil(count / columns));
     const cellWidth = (containerWidth - gap * (columns - 1)) / columns;
     const cellHeight = (containerHeight - gap * (rows - 1)) / rows;
-    const maxDiameter = Math.max(70, Math.min(cellWidth, cellHeight) * 1.06);
-    const minDiameter = Math.max(54, maxDiameter * 0.68);
+    const maxDiameter = Math.max(112, Math.min(cellWidth, cellHeight) * 1.32);
+    const minDiameter = Math.max(86, maxDiameter * 0.8);
 
-    el.keywordsStatus.textContent = `${ranking.length} palavras em destaque.`;
+    el.keywordsStatus.textContent = '';
 
     el.keywordsContainer.innerHTML = ranking.map((item, index) => {
       const count = Number(item.quantidade || 0);
@@ -612,7 +659,7 @@
 
   function startLiveRotation(items) {
     stopLiveRotation();
-    liveMessages = items.slice(0, 200);
+    liveMessages = items.slice(0, 1);
     liveIndex = 0;
 
     if (!liveMessages.length) {
@@ -621,17 +668,12 @@
       return;
     }
 
-    showLiveMessage(liveMessages[0], 1, liveMessages.length);
-
-    if (liveMessages.length === 1) return;
-
-    liveTimer = setInterval(() => {
-      setTimeout(() => {
-        if (!liveMessages.length) return;
-        liveIndex = (liveIndex + 1) % liveMessages.length;
-        showLiveMessage(liveMessages[liveIndex], liveIndex + 1, liveMessages.length);
-      }, 0);
-    }, CONFIG.liveIntervalMs);
+    if (el.liveMessageKicker) {
+      el.liveMessageKicker.textContent = 'ao vivo • última mensagem';
+    }
+    if (el.liveMessageText) {
+      el.liveMessageText.textContent = liveMessages[0].mensagem || '';
+    }
   }
 
   async function loadData() {
@@ -639,10 +681,12 @@
     loading = true;
 
     try {
-      const [messages, keywords] = await Promise.all([
+      const [messages, keywordsPayload] = await Promise.all([
         fetchMessages(),
         fetchKeywords()
       ]);
+      const keywords = keywordsPayload.ranking || [];
+      const totalKeywords = keywordsPayload.totalKeywords || 0;
 
       const filledItems = getFilledItems(messages);
       const hash = buildHash(filledItems);
@@ -652,11 +696,18 @@
       lastKeywordsData = keywords || [];
 
       updateDash(filledItems);
+      if (el.keywordsCount) {
+        el.keywordsCount.textContent = String(totalKeywords);
+      }
       if (keywordsHash !== lastKeywordsHash) {
         lastKeywordsHash = keywordsHash;
         renderKeywords(lastKeywordsData);
       }
-      startLiveRotation(filledItems);
+
+      const shouldRestartLive = changed || !liveMessages.length;
+      if (shouldRestartLive) {
+        startLiveRotation(filledItems);
+      }
 
       el.statusText.textContent = changed
         ? 'Atualização automática ativa.'
