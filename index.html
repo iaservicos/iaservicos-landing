@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel de Respostas ao Vivo</title>
+  <style>
+    .keywords-card {
+  padding: 22px;
+  margin-top: 16px;
+}
+
+.keywords-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.keywords-list {
+  display: grid;
+  gap: 10px;
+}
+
+.keyword-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.keyword-name {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.keyword-meta {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.keyword-count {
+  min-width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 900;
+  background: linear-gradient(135deg, rgba(72,216,255,0.18), rgba(134,184,255,0.16));
+  border: 1px solid rgba(255,255,255,0.08);
+}
+    :root {
+      --bg: #07131f;
+      --card: rgba(9, 23, 37, 0.68);
+      --card-2: rgba(10, 28, 46, 0.78);
+      --line: rgba(255,255,255,0.10);
+      --text: #eef6ff;
+      --muted: #b9ccdd;
+      --accent: #48d8ff;
+      --accent-2: #86b8ff;
+      --ok: #7ef1ba;
+      --radius: 22px;
+      --shadow: 0 18px 40px rgba(0,0,0,0.30);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(rgba(4, 11, 18, 0.45), rgba(4, 11, 18, 0.70)),
+        url('https://raw.githubusercontent.com/Weslleyneri/academyIA/main/Gemini_Generated_Image_jntf5ojntf5ojntf.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 34px 34px;
+      opacity: 0.18;
+    }
+
+    .page {
+      width: min(1260px, calc(100% - 24px));
+      margin: 24px auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card {
+      background: linear-gradient(180deg, var(--card), var(--card-2));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .hero {
+      padding: 28px;
+      margin-bottom: 16px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 14px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--ok);
+      box-shadow: 0 0 0 8px rgba(126,241,186,0.08);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.12); opacity: .72; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 36px;
+      line-height: 1.06;
+      letter-spacing: -.6px;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 780px;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .stat {
+      padding: 20px 22px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .stat-value {
+      font-size: 38px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-desc {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .dash-live-grid {
+      display: grid;
+      grid-template-columns: 370px 1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .pizza-card,
+    .live-card {
+      padding: 22px;
+      min-height: 430px;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .panel-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -.3px;
+    }
+
+    .panel-subtitle,
+    .status {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      margin-top: 4px;
+    }
+
+    .pizza-wrap {
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+    }
+
+    .pizza-chart {
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      position: relative;
+      background: conic-gradient(var(--accent) 0deg, var(--accent-2) 0deg, rgba(255,255,255,0.10) 0deg 360deg);
+      box-shadow:
+        inset 0 0 40px rgba(255,255,255,0.04),
+        0 18px 34px rgba(0,0,0,0.22);
+      transition: background .5s ease;
+    }
+
+    .pizza-chart::after {
+      content: "";
+      position: absolute;
+      inset: 50%;
+      width: 128px;
+      height: 128px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: linear-gradient(180deg, rgba(7,19,31,0.96), rgba(10,28,46,0.95));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: inset 0 0 20px rgba(255,255,255,0.03);
+    }
+
+    .pizza-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 1;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .pizza-percent {
+      font-size: 34px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .pizza-label {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .6px;
+    }
+
+    .pizza-legend {
+      width: 100%;
+      display: grid;
+      gap: 10px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .legend-left {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .legend-value {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .live-stage {
+      position: relative;
+      min-height: 320px;
+      height: calc(100% - 62px);
+      border-radius: 20px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(72,216,255,0.08), transparent 25%),
+        radial-gradient(circle at 80% 80%, rgba(126,241,186,0.08), transparent 20%),
+        rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 26px;
+    }
+
+    .live-message {
+      width: min(760px, 100%);
+      padding: 26px 28px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 16px 36px rgba(0,0,0,0.18);
+      text-align: center;
+      animation: messageIn .55s ease;
+    }
+
+    @keyframes messageIn {
+      from { opacity: 0; transform: translateY(26px) scale(.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes messageOut {
+      from { opacity: 1; transform: translateY(0) scale(1); }
+      to { opacity: 0; transform: translateY(-16px) scale(.98); }
+    }
+
+    .live-message.out {
+      animation: messageOut .45s ease forwards;
+    }
+
+    .live-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .live-text {
+      font-size: clamp(24px, 3vw, 38px);
+      line-height: 1.38;
+      font-weight: 800;
+      letter-spacing: -.4px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .live-meta {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .empty, .error, .loading {
+      padding: 18px;
+      border-radius: 14px;
+      text-align: center;
+      color: var(--muted);
+      background: rgba(255,255,255,0.04);
+      border: 1px dashed rgba(255,255,255,0.12);
+      width: 100%;
+    }
+
+    .error {
+      color: #ffdada;
+      border-color: rgba(255, 109, 109, 0.24);
+      background: rgba(255, 109, 109, 0.08);
+    }
+
+    @media (max-width: 1100px) {
+      .dash-live-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pizza-card,
+      .live-card {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .stats-row {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 30px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero,
+      .stat,
+      .pizza-card,
+      .live-card {
+        padding: 18px;
+      }
+
+      .pizza-chart {
+        width: 210px;
+        height: 210px;
+      }
+
+      .pizza-chart::after {
+        width: 106px;
+        height: 106px;
+      }
+
+      .live-stage {
+        min-height: 260px;
+        padding: 18px;
+      }
+
+      .live-message {
+        padding: 20px;
+      }
+
+      .live-text {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="card hero">
+      <div class="eyebrow">
+        <span class="dot"></span>
+        rolando ao vivo
+      </div>
+
+    </section>
+    <section class="card keywords-card">
+  <div class="keywords-head">
+    <div>Exemplo: se 2 pessoas escreverem “evolução”, a palavra contabiliza 2.
+      <div class="panel-title">Palavras-chave mais citadas</div>
+      <div class="panel-subtitle"></div>
+    </div>
+    <div class="status" id="keywordsStatus">Lendo palavras-chave...</div>
+  </div>
+
+  <div id="keywordsContainer" class="keywords-list">
+    <div class="loading">Carregando palavras-chave...</div>
+  </div>
+</section>
+
+    <section class="stats-row">
+      <div class="card stat">
+        <div class="stat-label">Convidados</div>
+        <div class="stat-value" id="totalGuests">150</div>
+
+      </div>
+
+      <div class="card stat">
+        <div class="stat-label">Mensagens recebidas</div>
+        <div class="stat-value" id="totalResponses">0</div>
+        <div class="stat-desc">Linhas preenchidas na coluna Mensagem.</div>
+      </div>
+
+      <div class="card stat">
+        <div class="stat-label">Última atualização</div>
+        <div class="stat-value" id="lastUpdate">--:--</div>
+        <div class="stat-desc">Leitura automática em tempo real.</div>
+      </div>
+    </section>
+
+    <section class="dash-live-grid">
+      <div class="card pizza-card">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Dash de participação</div>
+            <div class="panel-subtitle">Percentual de respostas sobre 150 convidados.</div>
+          </div>
+        </div>
+
+        <div class="pizza-wrap">
+          <div class="pizza-chart" id="pizzaChart">
+            <div class="pizza-center">
+              <div class="pizza-percent" id="pizzaPercent">0.0%</div>
+              <div class="pizza-label">respondido</div>
+            </div>
+          </div>
+
+          <div class="pizza-legend">
+            <div class="legend-item">
+              <div class="legend-left">
+                <span class="legend-dot" style="background: var(--accent);"></span>
+                Respondidas
+              </div>
+              <div class="legend-value" id="legendResponded">0</div>
+            </div>
+
+            <div class="legend-item">
+              <div class="legend-left">
+                <span class="legend-dot" style="background: rgba(255,255,255,0.18);"></span>
+                Faltando
+              </div>
+              <div class="legend-value" id="legendMissing">150</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card live-card">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Mensagens em live</div>
+            <div class="panel-subtitle">Uma por vez, entrando e saindo automaticamente.</div>
+          </div>
+          <div class="status" id="statusText">Aguardando leitura...</div>
+        </div>
+
+        <div id="responsesContainer" class="live-stage">
+          <div class="loading">Carregando mensagens...</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="./config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+  const CONFIG = {
+    SUPABASE_URL: window.APP_CONFIG?.SUPABASE_URL || '',
+    SUPABASE_PUBLISHABLE_KEY: window.APP_CONFIG?.SUPABASE_PUBLISHABLE_KEY || '',
+    totalGuests: 150,
+    refreshSeconds: 3,
+    liveIntervalMs: 3200,
+    maxKeywordsToShow: 12
+  };
+
+  const el = {
+    totalGuests: document.getElementById('totalGuests'),
+    totalResponses: document.getElementById('totalResponses'),
+    lastUpdate: document.getElementById('lastUpdate'),
+    responsesContainer: document.getElementById('responsesContainer'),
+    statusText: document.getElementById('statusText'),
+    pizzaChart: document.getElementById('pizzaChart'),
+    pizzaPercent: document.getElementById('pizzaPercent'),
+    legendResponded: document.getElementById('legendResponded'),
+    legendMissing: document.getElementById('legendMissing'),
+    keywordsContainer: document.getElementById('keywordsContainer'),
+    keywordsStatus: document.getElementById('keywordsStatus')
+  };
+
+  let refreshTimer = null;
+  let liveTimer = null;
+  let loading = false;
+  let lastHash = '';
+  let liveMessages = [];
+  let liveIndex = 0;
+  let supabase = null;
+
+  el.totalGuests.textContent = CONFIG.totalGuests;
+
+  function escapeHtml(value) {
+    return String(value ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function currentTime() {
+    return new Date().toLocaleTimeString('pt-BR', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+  }
+
+  function ensureSupabase() {
+    if (!CONFIG.SUPABASE_URL || !CONFIG.SUPABASE_PUBLISHABLE_KEY) {
+      throw new Error('Preencha o arquivo config.js com a URL e a publishable key do Supabase.');
+    }
+
+    if (!window.supabase || typeof window.supabase.createClient !== 'function') {
+      throw new Error('Biblioteca do Supabase não carregou corretamente.');
+    }
+
+    if (!supabase) {
+      supabase = window.supabase.createClient(
+        CONFIG.SUPABASE_URL,
+        CONFIG.SUPABASE_PUBLISHABLE_KEY
+      );
+    }
+  }
+
+  function buildHash(items) {
+    return JSON.stringify(items.map((item, index) => `${index}-${item.mensagem || ''}-${item.data || ''}`));
+  }
+
+  async function fetchMessages() {
+    ensureSupabase();
+
+    const { data, error } = await supabase
+      .from('mensagens')
+      .select('id, mensagem, data_hora')
+      .order('data_hora', { ascending: false })
+      .limit(200);
+
+    if (error) {
+      throw new Error(`Erro ao ler mensagens: ${error.message}`);
+    }
+
+    return (data || []).map(item => ({
+      id: item.id,
+      mensagem: item.mensagem || '',
+      data: item.data_hora || null
+    }));
+  }
+
+  async function fetchKeywords() {
+    ensureSupabase();
+
+    const { data, error } = await supabase
+      .from('palavras_chave')
+      .select('topico, quantidade, data_atualizacao')
+      .order('quantidade', { ascending: false })
+      .limit(CONFIG.maxKeywordsToShow);
+
+    if (error) {
+      throw new Error(`Erro ao ler palavras-chave: ${error.message}`);
+    }
+
+    return data || [];
+  }
+
+  function getFilledItems(items) {
+    return items.filter(item => String(item.mensagem || '').trim());
+  }
+
+  function updateDash(items) {
+    const total = items.length;
+    const percent = Math.min((total / CONFIG.totalGuests) * 100, 100);
+    const missing = Math.max(CONFIG.totalGuests - total, 0);
+    const degrees = percent * 3.6;
+
+    el.totalResponses.textContent = total;
+    el.lastUpdate.textContent = currentTime();
+    el.legendResponded.textContent = total;
+    el.legendMissing.textContent = missing;
+    el.pizzaPercent.textContent = `${percent.toFixed(1)}%`;
+    el.pizzaChart.style.background =
+      `conic-gradient(var(--accent) 0deg, var(--accent-2) ${degrees}deg, rgba(255,255,255,0.10) ${degrees}deg 360deg)`;
+  }
+
+  function renderKeywords(ranking) {
+    if (!ranking.length) {
+      el.keywordsContainer.innerHTML =
+        '<div class="empty">Ainda não há palavras-chave suficientes para contabilizar.</div>';
+      el.keywordsStatus.textContent = 'Sem palavras-chave no momento.';
+      return;
+    }
+
+    el.keywordsStatus.textContent = `${ranking.length} palavras em destaque.`;
+
+    el.keywordsContainer.innerHTML = ranking.map((item, index) => `
+      <div class="keyword-item">
+        <div>
+          <div class="keyword-name">${index + 1}. ${escapeHtml(item.topico)}</div>
+          <div class="keyword-meta">
+            A palavra apareceu ${item.quantidade} ${item.quantidade === 1 ? 'vez' : 'vezes'}.
+          </div>
+        </div>
+        <div class="keyword-count">${item.quantidade}</div>
+      </div>
+    `).join('');
+  }
+
+  function showLiveMessage(message, position, total) {
+    el.responsesContainer.innerHTML = `
+      <div class="live-message" id="liveMessageCard">
+        <div class="live-kicker">ao vivo • mensagem ${position} de ${total}</div>
+        <div class="live-text">${escapeHtml(message.mensagem)}</div>
+        <div class="live-meta">Atualizado às ${escapeHtml(currentTime())}</div>
+      </div>
+    `;
+  }
+
+  function stopLiveRotation() {
+    if (liveTimer) {
+      clearInterval(liveTimer);
+      liveTimer = null;
+    }
+  }
+
+  function startLiveRotation(items) {
+    stopLiveRotation();
+    liveMessages = items.slice(0, 200);
+    liveIndex = 0;
+
+    if (!liveMessages.length) {
+      el.responsesContainer.innerHTML =
+        '<div class="empty">Ainda não existem mensagens preenchidas.</div>';
+      return;
+    }
+
+    showLiveMessage(liveMessages[0], 1, liveMessages.length);
+
+    if (liveMessages.length === 1) return;
+
+    liveTimer = setInterval(() => {
+      const currentCard = document.getElementById('liveMessageCard');
+      if (currentCard) currentCard.classList.add('out');
+
+      setTimeout(() => {
+        if (!liveMessages.length) return;
+        liveIndex = (liveIndex + 1) % liveMessages.length;
+        showLiveMessage(liveMessages[liveIndex], liveIndex + 1, liveMessages.length);
+      }, 420);
+    }, CONFIG.liveIntervalMs);
+  }
+
+  async function loadData() {
+    if (loading) return;
+    loading = true;
+
+    try {
+      const [messages, keywords] = await Promise.all([
+        fetchMessages(),
+        fetchKeywords()
+      ]);
+
+      const filledItems = getFilledItems(messages);
+      const hash = buildHash(filledItems);
+      const changed = hash !== lastHash;
+      lastHash = hash;
+
+      updateDash(filledItems);
+      renderKeywords(keywords);
+      startLiveRotation(filledItems);
+
+      el.statusText.textContent = changed
+        ? `Atualizado às ${currentTime()} com novas mensagens.`
+        : `Última leitura às ${currentTime()} sem novas mensagens.`;
+    } catch (error) {
+      console.error(error);
+      stopLiveRotation();
+      el.responsesContainer.innerHTML = `<div class="error">${escapeHtml(error.message)}</div>`;
+      el.keywordsContainer.innerHTML = `<div class="error">${escapeHtml(error.message)}</div>`;
+      el.statusText.textContent = 'Erro na leitura das mensagens.';
+      el.keywordsStatus.textContent = 'Erro na leitura das palavras-chave.';
+    } finally {
+      loading = false;
+    }
+  }
+
+  function startAutoRefresh() {
+    if (refreshTimer) clearInterval(refreshTimer);
+    refreshTimer = setInterval(loadData, CONFIG.refreshSeconds * 1000);
+  }
+
+  loadData();
+  startAutoRefresh();
+</script>
+</body>
+</html>
