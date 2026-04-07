@@ -6,58 +6,81 @@
   <title>Painel de Respostas ao Vivo</title>
   <style>
     .keywords-card {
-  padding: 22px;
-  margin-top: 16px;
-}
+      padding: 22px;
+      margin-bottom: 16px;
+    }
 
-.keywords-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-}
+    .keywords-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
 
-.keywords-list {
-  display: grid;
-  gap: 10px;
-}
+    .keywords-bubbles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      justify-content: center;
+      min-height: 210px;
+    }
 
-.keyword-item {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  border-radius: 16px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-}
+    .keyword-bubble {
+      --bubble-size: 90px;
+      --bubble-opacity: 0.18;
+      width: var(--bubble-size);
+      height: var(--bubble-size);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      text-align: center;
+      background:
+        radial-gradient(circle at 30% 25%, rgba(255,255,255,0.28), transparent 28%),
+        linear-gradient(135deg, rgba(72,216,255,var(--bubble-opacity)), rgba(134,184,255,var(--bubble-opacity)));
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.18), inset 0 0 24px rgba(255,255,255,0.05);
+      overflow: hidden;
+      animation: bubbleFloat 6s ease-in-out infinite;
+    }
 
-.keyword-name {
-  font-size: 16px;
-  font-weight: 700;
-}
+    .keyword-bubble:nth-child(2n) { animation-delay: .8s; }
+    .keyword-bubble:nth-child(3n) { animation-delay: 1.4s; }
+    .keyword-bubble:nth-child(4n) { animation-delay: .4s; }
 
-.keyword-meta {
-  color: var(--muted);
-  font-size: 12px;
-  margin-top: 4px;
-}
+    @keyframes bubbleFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-6px) scale(1.03); }
+    }
 
-.keyword-count {
-  min-width: 52px;
-  height: 52px;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  font-weight: 900;
-  background: linear-gradient(135deg, rgba(72,216,255,0.18), rgba(134,184,255,0.16));
-  border: 1px solid rgba(255,255,255,0.08);
-}
+    .bubble-inner {
+      display: grid;
+      gap: 4px;
+      line-height: 1.1;
+      width: 100%;
+      color: var(--text);
+    }
+
+    .bubble-topic {
+      font-size: clamp(12px, calc(var(--bubble-size) / 8), 18px);
+      font-weight: 800;
+      word-break: break-word;
+    }
+
+    .bubble-percent {
+      font-size: clamp(11px, calc(var(--bubble-size) / 12), 14px);
+      color: var(--muted);
+    }
+
+    .bubble-count {
+      font-size: clamp(11px, calc(var(--bubble-size) / 14), 13px);
+      font-weight: 700;
+      color: rgba(255,255,255,0.92);
+    }
     :root {
       --bg: #07131f;
       --card: rgba(9, 23, 37, 0.68);
@@ -77,7 +100,8 @@
     html, body {
       margin: 0;
       padding: 0;
-      min-height: 100%;
+      width: 100%;
+      height: 100%;
       font-family: "Segoe UI", Arial, sans-serif;
       color: var(--text);
       background-color: var(--bg);
@@ -88,6 +112,7 @@
       background-position: center;
       background-attachment: fixed;
       overflow-x: hidden;
+      overflow-y: hidden;
     }
 
     body::before {
@@ -107,6 +132,10 @@
       margin: 24px auto;
       position: relative;
       z-index: 1;
+      height: calc(100vh - 48px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
 
     .card {
@@ -118,65 +147,32 @@
       -webkit-backdrop-filter: blur(10px);
     }
 
-    .hero {
-      padding: 28px;
-      margin-bottom: 16px;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-      color: var(--muted);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: .5px;
-      margin-bottom: 14px;
-    }
-
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--ok);
-      box-shadow: 0 0 0 8px rgba(126,241,186,0.08);
-      animation: pulse 1.8s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.12); opacity: .72; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
-    h1 {
-      margin: 0 0 8px;
-      font-size: 36px;
-      line-height: 1.06;
-      letter-spacing: -.6px;
-    }
-
-    .hero p {
-      margin: 0;
-      max-width: 780px;
-      color: var(--muted);
-      line-height: 1.6;
-      font-size: 15px;
-    }
-
-    .stats-row {
+    .stacked-sections {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 30%);
       gap: 16px;
-      margin-bottom: 16px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .main-column,
+    .side-column {
+      display: grid;
+      gap: 16px;
+      min-height: 0;
+    }
+
+    .main-column {
+      grid-template-rows: 1fr 1fr;
+    }
+
+    .side-column {
+      grid-template-rows: auto 1fr;
     }
 
     .stat {
-      padding: 20px 22px;
+      padding: 16px 20px;
+      min-height: 110px;
     }
 
     .stat-label {
@@ -188,7 +184,7 @@
     }
 
     .stat-value {
-      font-size: 38px;
+      font-size: 32px;
       font-weight: 800;
       line-height: 1;
       margin-bottom: 8px;
@@ -200,17 +196,32 @@
       line-height: 1.5;
     }
 
-    .dash-live-grid {
-      display: grid;
-      grid-template-columns: 370px 1fr;
-      gap: 16px;
-      align-items: stretch;
+    .stat-desc.hidden {
+      display: none;
     }
 
-    .pizza-card,
+    .preview-card {
+      padding: 14px;
+      overflow: hidden;
+    }
+
+    .preview-image {
+      width: 100%;
+      height: 100%;
+      min-height: 260px;
+      display: block;
+      object-fit: cover;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+    }
+
+    .keywords-card,
     .live-card {
       padding: 22px;
-      min-height: 430px;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
     }
 
     .panel-head {
@@ -236,107 +247,10 @@
       margin-top: 4px;
     }
 
-    .pizza-wrap {
-      min-height: 320px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 18px;
-    }
-
-    .pizza-chart {
-      width: 250px;
-      height: 250px;
-      border-radius: 50%;
-      position: relative;
-      background: conic-gradient(var(--accent) 0deg, var(--accent-2) 0deg, rgba(255,255,255,0.10) 0deg 360deg);
-      box-shadow:
-        inset 0 0 40px rgba(255,255,255,0.04),
-        0 18px 34px rgba(0,0,0,0.22);
-      transition: background .5s ease;
-    }
-
-    .pizza-chart::after {
-      content: "";
-      position: absolute;
-      inset: 50%;
-      width: 128px;
-      height: 128px;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      background: linear-gradient(180deg, rgba(7,19,31,0.96), rgba(10,28,46,0.95));
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: inset 0 0 20px rgba(255,255,255,0.03);
-    }
-
-    .pizza-center {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      z-index: 1;
-      text-align: center;
-      pointer-events: none;
-    }
-
-    .pizza-percent {
-      font-size: 34px;
-      font-weight: 900;
-      line-height: 1;
-    }
-
-    .pizza-label {
-      margin-top: 6px;
-      font-size: 12px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .6px;
-    }
-
-    .pizza-legend {
-      width: 100%;
-      display: grid;
-      gap: 10px;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 12px 14px;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.07);
-    }
-
-    .legend-left {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .legend-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-    }
-
-    .legend-value {
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--text);
-    }
-
     .live-stage {
       position: relative;
-      min-height: 320px;
-      height: calc(100% - 62px);
+      min-height: 0;
+      flex: 1;
       border-radius: 20px;
       overflow: hidden;
       background:
@@ -347,7 +261,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 26px;
+      padding: 22px;
     }
 
     .live-message {
@@ -358,21 +272,6 @@
       border: 1px solid rgba(255,255,255,0.10);
       box-shadow: 0 16px 36px rgba(0,0,0,0.18);
       text-align: center;
-      animation: messageIn .55s ease;
-    }
-
-    @keyframes messageIn {
-      from { opacity: 0; transform: translateY(26px) scale(.98); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    @keyframes messageOut {
-      from { opacity: 1; transform: translateY(0) scale(1); }
-      to { opacity: 0; transform: translateY(-16px) scale(.98); }
-    }
-
-    .live-message.out {
-      animation: messageOut .45s ease forwards;
     }
 
     .live-kicker {
@@ -399,12 +298,6 @@
       word-break: break-word;
     }
 
-    .live-meta {
-      margin-top: 16px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
     .empty, .error, .loading {
       padding: 18px;
       border-radius: 14px;
@@ -422,46 +315,37 @@
     }
 
     @media (max-width: 1100px) {
-      .dash-live-grid {
+      html, body {
+        overflow-y: auto;
+      }
+
+      .page {
+        height: auto;
+        min-height: 100vh;
+      }
+
+      .stacked-sections {
         grid-template-columns: 1fr;
       }
 
-      .pizza-card,
+      .keywords-card,
       .live-card {
         min-height: auto;
       }
-    }
 
-    @media (max-width: 900px) {
-      .stats-row {
-        grid-template-columns: 1fr;
-      }
-
-      h1 {
-        font-size: 30px;
+      .side-column {
+        grid-template-rows: auto auto;
       }
     }
 
     @media (max-width: 640px) {
-      .hero,
       .stat,
-      .pizza-card,
+      .keywords-card,
       .live-card {
         padding: 18px;
       }
 
-      .pizza-chart {
-        width: 210px;
-        height: 210px;
-      }
-
-      .pizza-chart::after {
-        width: 106px;
-        height: 106px;
-      }
-
       .live-stage {
-        min-height: 260px;
         padding: 18px;
       }
 
@@ -477,98 +361,52 @@
 </head>
 <body>
   <main class="page">
-    <section class="card hero">
-      <div class="eyebrow">
-        <span class="dot"></span>
-        rolando ao vivo
+    <div class="stacked-sections">
+      <div class="main-column">
+        <div class="card keywords-card">
+          <div class="keywords-head">
+            <div>
+              <div class="panel-title">Palavras-chave mais citadas</div>
+              <div class="panel-subtitle">Top 15 por volume, com o tamanho da bolha variando conforme a participação.</div>
+            </div>
+            <div class="status" id="keywordsStatus">Lendo palavras-chave...</div>
+          </div>
+
+          <div id="keywordsContainer" class="keywords-bubbles">
+            <div class="loading">Carregando palavras-chave...</div>
+          </div>
+        </div>
+
+        <div class="card live-card">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Mensagens em live</div>
+              <div class="panel-subtitle">Uma por vez, sem mostrar horário de atualização.</div>
+            </div>
+            <div class="status" id="statusText">Aguardando leitura...</div>
+          </div>
+
+          <div id="responsesContainer" class="live-stage">
+            <div class="live-message" id="liveMessageCard">
+              <div class="live-kicker" id="liveMessageKicker">ao vivo</div>
+              <div class="live-text" id="liveMessageText">Carregando mensagens...</div>
+            </div>
+          </div>
+        </div>
       </div>
 
-    </section>
-    <section class="card keywords-card">
-  <div class="keywords-head">
-    <div>Exemplo: se 2 pessoas escreverem “evolução”, a palavra contabiliza 2.
-      <div class="panel-title">Palavras-chave mais citadas</div>
-      <div class="panel-subtitle"></div>
+      <div class="side-column">
+        <div class="card stat">
+          <div class="stat-label">Mensagens recebidas</div>
+          <div class="stat-value" id="totalResponses">0</div>
+          <div class="stat-desc hidden">Linhas preenchidas na coluna Mensagem.</div>
+        </div>
+
+        <div class="card preview-card">
+          <img class="preview-image" src="./Imagem1.jpg" alt="Imagem do painel IA Servicos" />
+        </div>
+      </div>
     </div>
-    <div class="status" id="keywordsStatus">Lendo palavras-chave...</div>
-  </div>
-
-  <div id="keywordsContainer" class="keywords-list">
-    <div class="loading">Carregando palavras-chave...</div>
-  </div>
-</section>
-
-    <section class="stats-row">
-      <div class="card stat">
-        <div class="stat-label">Convidados</div>
-        <div class="stat-value" id="totalGuests">150</div>
-
-      </div>
-
-      <div class="card stat">
-        <div class="stat-label">Mensagens recebidas</div>
-        <div class="stat-value" id="totalResponses">0</div>
-        <div class="stat-desc">Linhas preenchidas na coluna Mensagem.</div>
-      </div>
-
-      <div class="card stat">
-        <div class="stat-label">Última atualização</div>
-        <div class="stat-value" id="lastUpdate">--:--</div>
-        <div class="stat-desc">Leitura automática em tempo real.</div>
-      </div>
-    </section>
-
-    <section class="dash-live-grid">
-      <div class="card pizza-card">
-        <div class="panel-head">
-          <div>
-            <div class="panel-title">Dash de participação</div>
-            <div class="panel-subtitle">Percentual de respostas sobre 150 convidados.</div>
-          </div>
-        </div>
-
-        <div class="pizza-wrap">
-          <div class="pizza-chart" id="pizzaChart">
-            <div class="pizza-center">
-              <div class="pizza-percent" id="pizzaPercent">0.0%</div>
-              <div class="pizza-label">respondido</div>
-            </div>
-          </div>
-
-          <div class="pizza-legend">
-            <div class="legend-item">
-              <div class="legend-left">
-                <span class="legend-dot" style="background: var(--accent);"></span>
-                Respondidas
-              </div>
-              <div class="legend-value" id="legendResponded">0</div>
-            </div>
-
-            <div class="legend-item">
-              <div class="legend-left">
-                <span class="legend-dot" style="background: rgba(255,255,255,0.18);"></span>
-                Faltando
-              </div>
-              <div class="legend-value" id="legendMissing">150</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card live-card">
-        <div class="panel-head">
-          <div>
-            <div class="panel-title">Mensagens em live</div>
-            <div class="panel-subtitle">Uma por vez, entrando e saindo automaticamente.</div>
-          </div>
-          <div class="status" id="statusText">Aguardando leitura...</div>
-        </div>
-
-        <div id="responsesContainer" class="live-stage">
-          <div class="loading">Carregando mensagens...</div>
-        </div>
-      </div>
-    </section>
   </main>
 
   <script src="./config.js"></script>
@@ -577,22 +415,15 @@
   const CONFIG = {
     SUPABASE_URL: window.APP_CONFIG?.SUPABASE_URL || '',
     SUPABASE_PUBLISHABLE_KEY: window.APP_CONFIG?.SUPABASE_PUBLISHABLE_KEY || '',
-    totalGuests: 150,
     refreshSeconds: 3,
     liveIntervalMs: 3200,
-    maxKeywordsToShow: 12
+    maxKeywordsToShow: 15
   };
 
   const el = {
-    totalGuests: document.getElementById('totalGuests'),
     totalResponses: document.getElementById('totalResponses'),
-    lastUpdate: document.getElementById('lastUpdate'),
     responsesContainer: document.getElementById('responsesContainer'),
     statusText: document.getElementById('statusText'),
-    pizzaChart: document.getElementById('pizzaChart'),
-    pizzaPercent: document.getElementById('pizzaPercent'),
-    legendResponded: document.getElementById('legendResponded'),
-    legendMissing: document.getElementById('legendMissing'),
     keywordsContainer: document.getElementById('keywordsContainer'),
     keywordsStatus: document.getElementById('keywordsStatus')
   };
@@ -601,11 +432,10 @@
   let liveTimer = null;
   let loading = false;
   let lastHash = '';
+  let lastKeywordsHash = '';
   let liveMessages = [];
   let liveIndex = 0;
-  let supabase = null;
-
-  el.totalGuests.textContent = CONFIG.totalGuests;
+  let supabaseClient = null;
 
   function escapeHtml(value) {
     return String(value ?? '')
@@ -633,8 +463,8 @@
       throw new Error('Biblioteca do Supabase não carregou corretamente.');
     }
 
-    if (!supabase) {
-      supabase = window.supabase.createClient(
+    if (!supabaseClient) {
+      supabaseClient = window.supabase.createClient(
         CONFIG.SUPABASE_URL,
         CONFIG.SUPABASE_PUBLISHABLE_KEY
       );
@@ -648,7 +478,7 @@
   async function fetchMessages() {
     ensureSupabase();
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('mensagens')
       .select('id, mensagem, data_hora')
       .order('data_hora', { ascending: false })
@@ -668,7 +498,7 @@
   async function fetchKeywords() {
     ensureSupabase();
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
       .from('palavras_chave')
       .select('topico, quantidade, data_atualizacao')
       .order('quantidade', { ascending: false })
@@ -687,17 +517,8 @@
 
   function updateDash(items) {
     const total = items.length;
-    const percent = Math.min((total / CONFIG.totalGuests) * 100, 100);
-    const missing = Math.max(CONFIG.totalGuests - total, 0);
-    const degrees = percent * 3.6;
 
     el.totalResponses.textContent = total;
-    el.lastUpdate.textContent = currentTime();
-    el.legendResponded.textContent = total;
-    el.legendMissing.textContent = missing;
-    el.pizzaPercent.textContent = `${percent.toFixed(1)}%`;
-    el.pizzaChart.style.background =
-      `conic-gradient(var(--accent) 0deg, var(--accent-2) ${degrees}deg, rgba(255,255,255,0.10) ${degrees}deg 360deg)`;
   }
 
   function renderKeywords(ranking) {
@@ -708,29 +529,36 @@
       return;
     }
 
+    const totalCount = ranking.reduce((sum, item) => sum + Number(item.quantidade || 0), 0) || 1;
+
     el.keywordsStatus.textContent = `${ranking.length} palavras em destaque.`;
 
-    el.keywordsContainer.innerHTML = ranking.map((item, index) => `
-      <div class="keyword-item">
-        <div>
-          <div class="keyword-name">${index + 1}. ${escapeHtml(item.topico)}</div>
-          <div class="keyword-meta">
-            A palavra apareceu ${item.quantidade} ${item.quantidade === 1 ? 'vez' : 'vezes'}.
+    el.keywordsContainer.innerHTML = ranking.map((item, index) => {
+      const count = Number(item.quantidade || 0);
+      const percent = (count / totalCount) * 100;
+      const bubbleSize = Math.max(84, Math.min(84 + (percent * 2.3), 190));
+      const opacity = Math.max(0.18, Math.min(0.18 + (percent / 140), 0.42));
+
+      return `
+        <div class="keyword-bubble" style="--bubble-size:${bubbleSize}px; --bubble-opacity:${opacity};" title="${escapeHtml(item.topico)}: ${count} (${percent.toFixed(1)}%)">
+          <div class="bubble-inner">
+            <div class="bubble-topic">${escapeHtml(item.topico)}</div>
+            <div class="bubble-percent">${percent.toFixed(1)}%</div>
+            <div class="bubble-count">${count} ${count === 1 ? 'vez' : 'vezes'}</div>
           </div>
         </div>
-        <div class="keyword-count">${item.quantidade}</div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
   }
 
   function showLiveMessage(message, position, total) {
-    el.responsesContainer.innerHTML = `
-      <div class="live-message" id="liveMessageCard">
-        <div class="live-kicker">ao vivo • mensagem ${position} de ${total}</div>
-        <div class="live-text">${escapeHtml(message.mensagem)}</div>
-        <div class="live-meta">Atualizado às ${escapeHtml(currentTime())}</div>
-      </div>
-    `;
+    if (el.liveMessageKicker) {
+      el.liveMessageKicker.textContent = `ao vivo • mensagem ${position} de ${total}`;
+    }
+
+    if (el.liveMessageText) {
+      el.liveMessageText.textContent = message.mensagem || '';
+    }
   }
 
   function stopLiveRotation() {
@@ -746,8 +574,8 @@
     liveIndex = 0;
 
     if (!liveMessages.length) {
-      el.responsesContainer.innerHTML =
-        '<div class="empty">Ainda não existem mensagens preenchidas.</div>';
+      if (el.liveMessageKicker) el.liveMessageKicker.textContent = 'ao vivo';
+      if (el.liveMessageText) el.liveMessageText.textContent = 'Ainda não existem mensagens preenchidas.';
       return;
     }
 
@@ -756,14 +584,11 @@
     if (liveMessages.length === 1) return;
 
     liveTimer = setInterval(() => {
-      const currentCard = document.getElementById('liveMessageCard');
-      if (currentCard) currentCard.classList.add('out');
-
       setTimeout(() => {
         if (!liveMessages.length) return;
         liveIndex = (liveIndex + 1) % liveMessages.length;
         showLiveMessage(liveMessages[liveIndex], liveIndex + 1, liveMessages.length);
-      }, 420);
+      }, 0);
     }, CONFIG.liveIntervalMs);
   }
 
@@ -779,16 +604,20 @@
 
       const filledItems = getFilledItems(messages);
       const hash = buildHash(filledItems);
+      const keywordsHash = JSON.stringify((keywords || []).map(item => `${item.topico || ''}-${item.quantidade || 0}`));
       const changed = hash !== lastHash;
       lastHash = hash;
 
       updateDash(filledItems);
-      renderKeywords(keywords);
+      if (keywordsHash !== lastKeywordsHash) {
+        lastKeywordsHash = keywordsHash;
+        renderKeywords(keywords);
+      }
       startLiveRotation(filledItems);
 
       el.statusText.textContent = changed
-        ? `Atualizado às ${currentTime()} com novas mensagens.`
-        : `Última leitura às ${currentTime()} sem novas mensagens.`;
+        ? 'Atualização automática ativa.'
+        : 'Aguardando novas mensagens.';
     } catch (error) {
       console.error(error);
       stopLiveRotation();
