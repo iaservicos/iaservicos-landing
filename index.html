@@ -1,737 +1,188 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Painel de Respostas ao Vivo</title>
-  <style>
-    .keywords-card {
-      padding: 22px;
-      margin-bottom: 0;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA Serviços - Positivo Tecnologia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .keywords-head {
-      display: grid;
-      justify-items: center;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
-      text-align: center;
-    }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1a2332 0%, #2d3e50 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .keywords-bubbles {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-      justify-content: space-between;
-      align-content: space-between;
-      flex: 1;
-      min-height: 0;
-      overflow: visible;
-      padding: 4px 2px;
-    }
+        /* Header */
+        header {
+            background: rgba(26, 35, 50, 0.98);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-    .keyword-bubble {
-      --bubble-size: 112px;
-      --bubble-opacity: 0.18;
-      width: var(--bubble-size);
-      height: var(--bubble-size);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: clamp(8px, calc(var(--bubble-size) / 10), 14px);
-      text-align: center;
-      background:
-        radial-gradient(circle at 30% 25%, rgba(255,255,255,0.28), transparent 28%),
-        linear-gradient(135deg, rgba(72,216,255,var(--bubble-opacity)), rgba(134,184,255,var(--bubble-opacity)));
-      border: 1px solid rgba(255,255,255,0.12);
-      box-shadow: 0 12px 24px rgba(0,0,0,0.18), inset 0 0 24px rgba(255,255,255,0.05);
-      overflow: hidden;
-    }
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-    .bubble-inner {
-      display: grid;
-      gap: 4px;
-      line-height: 1.1;
-      width: 100%;
-      color: var(--text);
-    }
+        .logo {
+            font-size: 0.9rem;
+            color: #b0b0b0;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
 
-    .bubble-topic {
-      font-size: clamp(11px, calc(var(--bubble-size) / 7.4), 22px);
-      font-weight: 800;
-      word-break: break-word;
-    }
+        .logo strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
 
-    .bubble-percent {
-      font-size: clamp(10px, calc(var(--bubble-size) / 9.8), 16px);
-      color: var(--muted);
-    }
+        /* Main Content */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+        }
 
-    .bubble-count {
-      font-size: clamp(10px, calc(var(--bubble-size) / 10.8), 15px);
-      font-weight: 700;
-      color: rgba(255,255,255,0.92);
-    }
-    :root {
-      --bg: #07131f;
-      --card: rgba(9, 23, 37, 0.68);
-      --card-2: rgba(10, 28, 46, 0.78);
-      --line: rgba(255,255,255,0.10);
-      --text: #eef6ff;
-      --muted: #b9ccdd;
-      --accent: #48d8ff;
-      --accent-2: #86b8ff;
-      --ok: #7ef1ba;
-      --radius: 22px;
-      --shadow: 0 18px 40px rgba(0,0,0,0.30);
-    }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+        }
 
-    * { box-sizing: border-box; }
+        /* Hero Section */
+        .hero {
+            margin-bottom: 3rem;
+        }
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      font-family: "Segoe UI", Arial, sans-serif;
-      color: var(--text);
-      background-color: var(--bg);
-      background-image:
-        linear-gradient(rgba(4, 11, 18, 0.45), rgba(4, 11, 18, 0.70)),
-        url('./imagem (18) (1).png');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      overflow-x: hidden;
-      overflow-y: hidden;
-    }
+        .positivo-badge {
+            display: inline-block;
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            color: #2563eb;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background:
-        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-      background-size: 34px 34px;
-      opacity: 0.18;
-    }
+        h1 {
+            font-size: 3rem;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
 
-    .page {
-      width: min(1260px, calc(100% - 24px));
-      margin: 24px auto;
-      position: relative;
-      z-index: 1;
-      height: calc(100vh - 48px);
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
+        .subtitle {
+            font-size: 1.3rem;
+            color: #b0b0b0;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-    .card {
-      background: linear-gradient(180deg, var(--card), var(--card-2));
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
+        .description {
+            font-size: 1rem;
+            color: #909090;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+        }
 
-    .stacked-sections {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(220px, 24%);
-      grid-template-rows: 66% 34%;
-      gap: 16px;
-      flex: 1;
-      min-height: 0;
-    }
+        /* CTA Button */
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
 
-    .main-column,
-    .side-column {
-      min-height: 0;
-    }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
 
-    .main-column {
-      grid-column: 1;
-      grid-row: 2;
-    }
+        /* Footer */
+        footer {
+            background: rgba(26, 35, 50, 0.98);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            margin-top: auto;
+            text-align: center;
+            color: #707070;
+            font-size: 0.85rem;
+        }
 
-    .side-column {
-      grid-column: 2;
-      grid-row: 2;
-    }
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
 
-    .top-keywords {
-      grid-column: 1 / -1;
-      grid-row: 1;
-    }
+            .subtitle {
+                font-size: 1.1rem;
+            }
 
-    .side-column .stat {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      height: 100%;
-    }
-
-    .main-column .live-card {
-      height: 100%;
-    }
-
-    .stat {
-      padding: 14px 16px;
-      min-height: 90px;
-    }
-
-    .stat-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .6px;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
-    .stat-group {
-      display: grid;
-      justify-items: center;
-      gap: 4px;
-    }
-
-    .stat-group .stat-label,
-    .stat-group .stat-value {
-      margin: 0;
-    }
-
-    .stat-value {
-      font-size: 28px;
-      font-weight: 800;
-      line-height: 1;
-      margin-bottom: 6px;
-    }
-
-    .stat-keywords {
-      display: inline-flex;
-      align-items: baseline;
-      justify-content: center;
-      gap: 6px;
-      margin-top: 4px;
-    }
-
-    .stat-phone {
-      margin-top: 6px;
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text);
-      letter-spacing: .2px;
-    }
-
-    .stat-keywords-label {
-      color: var(--muted);
-      font-size: 16px;
-      line-height: 1;
-    }
-
-    .stat-keywords-value {
-      font-size: 28px;
-      line-height: 1;
-      font-weight: 800;
-    }
-
-    .stat-desc {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .stat-desc.hidden {
-      display: none;
-    }
-
-    .keywords-card,
-    .live-card {
-      padding: 22px;
-      min-height: 0;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .panel-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
-
-    .panel-title {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: -.3px;
-    }
-
-    .live-card .panel-title {
-      font-size: 18px;
-    }
-
-    .panel-subtitle,
-    .status {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.5;
-      margin-top: 4px;
-    }
-
-    .live-stage {
-      position: relative;
-      min-height: 0;
-      flex: 1;
-      border-radius: 20px;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 20% 20%, rgba(72,216,255,0.08), transparent 25%),
-        radial-gradient(circle at 80% 80%, rgba(126,241,186,0.08), transparent 20%),
-        rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.08);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 22px;
-    }
-
-    .live-message {
-      width: min(1100px, 100%);
-      padding: 26px 28px;
-      border-radius: 24px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.10);
-      box-shadow: 0 16px 36px rgba(0,0,0,0.18);
-      text-align: center;
-    }
-
-    .live-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.08);
-      color: var(--muted);
-      font-size: 12px;
-      letter-spacing: .5px;
-      text-transform: uppercase;
-      margin-bottom: 16px;
-    }
-
-    .live-text {
-      font-size: clamp(17px, 2.1vw, 27px);
-      line-height: 1.38;
-      font-weight: 800;
-      letter-spacing: -.4px;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .empty, .error, .loading {
-      padding: 18px;
-      border-radius: 14px;
-      text-align: center;
-      color: var(--muted);
-      background: rgba(255,255,255,0.04);
-      border: 1px dashed rgba(255,255,255,0.12);
-      width: 100%;
-    }
-
-    .error {
-      color: #ffdada;
-      border-color: rgba(255, 109, 109, 0.24);
-      background: rgba(255, 109, 109, 0.08);
-    }
-
-    @media (max-width: 1100px) {
-      html, body {
-        overflow-y: auto;
-      }
-
-      .page {
-        height: auto;
-        min-height: 100vh;
-      }
-
-      .stacked-sections {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto;
-      }
-
-      .top-keywords,
-      .main-column,
-      .side-column {
-        grid-column: 1;
-        grid-row: auto;
-      }
-
-      .keywords-card,
-      .live-card {
-        min-height: auto;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .stat,
-      .keywords-card,
-      .live-card {
-        padding: 18px;
-      }
-
-      .live-stage {
-        padding: 18px;
-      }
-
-      .live-message {
-        padding: 20px;
-      }
-
-      .live-text {
-        font-size: 17px;
-      }
-    }
-  </style>
+            main {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <main class="page">
-    <div class="stacked-sections">
-      <div class="card keywords-card top-keywords">
-        <div class="keywords-head">
-          <div>
-            <div class="panel-title">Palavras-chave mais citadas</div>
-          </div>
-          <div class="status" id="keywordsStatus">Lendo palavras-chave...</div>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">
+                <strong>IA Serviços</strong>
+                <span>Positivo Tecnologia</span>
+            </a>
         </div>
+    </header>
 
-        <div id="keywordsContainer" class="keywords-bubbles">
-          <div class="loading">Carregando palavras-chave...</div>
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="positivo-badge">Setor de IA Serviços</div>
+                <h1>Soluções Inteligentes para sua Empresa</h1>
+                <p class="subtitle">Transformando processos com tecnologia e inovação</p>
+                <p class="description">
+                    Bem-vindo ao setor de IA Serviços da Positivo Tecnologia. Oferecemos soluções inteligentes e integradas para otimizar seus processos e impulsionar seu negócio.
+                </p>
+                <a href="https://portalhaas.iaservicos.online" class="cta-button">Acessar Portal HaaS</a>
+            </section>
         </div>
-      </div>
+    </main>
 
-      <div class="main-column">
-        <div class="card live-card">
-          <div class="panel-head">
-            <div>
-              <div class="panel-title">Mensagens em live</div>
-              
-            </div>
-            <div class="status" id="statusText">Aguardando leitura...</div>
-          </div>
-
-          <div id="responsesContainer" class="live-stage">
-            <div class="live-message" id="liveMessageCard">
-              <div class="live-kicker" id="liveMessageKicker">ao vivo</div>
-              <div class="live-text" id="liveMessageText">Carregando mensagens...</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="side-column">
-        <div class="card stat">
-          <div class="stat-group">
-            <div class="stat-label">Mensagens recebidas</div>
-            <div class="stat-value" id="totalResponses">0</div>
-          </div>
-
-          <div class="stat-group">
-            <div class="stat-label">Palavras-chave</div>
-            <div class="stat-value" id="keywordsCount">0</div>
-          </div>
-
-          <div class="stat-phone">(41)99157-7161</div>
-          <div class="stat-desc hidden">Linhas preenchidas na coluna Mensagem.</div>
-        </div>
-
-      </div>
-    </div>
-  </main>
-
-  <script src="./config.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-  const CONFIG = {
-    SUPABASE_URL: window.APP_CONFIG?.SUPABASE_URL || '',
-    SUPABASE_PUBLISHABLE_KEY: window.APP_CONFIG?.SUPABASE_PUBLISHABLE_KEY || '',
-    refreshSeconds: 3,
-    liveIntervalMs: 3200,
-    maxKeywordsToShow: 10
-  };
-
-  const el = {
-    totalResponses: document.getElementById('totalResponses'),
-    keywordsCount: document.getElementById('keywordsCount'),
-    responsesContainer: document.getElementById('responsesContainer'),
-    statusText: document.getElementById('statusText'),
-    liveMessageKicker: document.getElementById('liveMessageKicker'),
-    liveMessageText: document.getElementById('liveMessageText'),
-    keywordsContainer: document.getElementById('keywordsContainer'),
-    keywordsStatus: document.getElementById('keywordsStatus')
-  };
-
-  let refreshTimer = null;
-  let liveTimer = null;
-  let resizeTimer = null;
-  let loading = false;
-  let lastHash = '';
-  let lastKeywordsHash = '';
-  let lastKeywordsData = [];
-  let liveMessages = [];
-  let liveIndex = 0;
-  let supabaseClient = null;
-
-  function escapeHtml(value) {
-    return String(value ?? '')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
-  }
-
-  function currentTime() {
-    return new Date().toLocaleTimeString('pt-BR', {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    });
-  }
-
-  function ensureSupabase() {
-    if (!CONFIG.SUPABASE_URL || !CONFIG.SUPABASE_PUBLISHABLE_KEY) {
-      throw new Error('Preencha o arquivo config.js com a URL e a publishable key do Supabase.');
-    }
-
-    if (!window.supabase || typeof window.supabase.createClient !== 'function') {
-      throw new Error('Biblioteca do Supabase não carregou corretamente.');
-    }
-
-    if (!supabaseClient) {
-      supabaseClient = window.supabase.createClient(
-        CONFIG.SUPABASE_URL,
-        CONFIG.SUPABASE_PUBLISHABLE_KEY
-      );
-    }
-  }
-
-  function buildHash(items) {
-    return JSON.stringify(items.map((item, index) => `${index}-${item.mensagem || ''}-${item.data || ''}`));
-  }
-
-  async function fetchMessages() {
-    ensureSupabase();
-
-    const { data, error } = await supabaseClient
-      .from('mensagens')
-      .select('id, mensagem, data_hora')
-      .order('data_hora', { ascending: false })
-      .limit(200);
-
-    if (error) {
-      throw new Error(`Erro ao ler mensagens: ${error.message}`);
-    }
-
-    return (data || []).map(item => ({
-      id: item.id,
-      mensagem: item.mensagem || '',
-      data: item.data_hora || null
-    }));
-  }
-
-  async function fetchKeywords() {
-    ensureSupabase();
-
-    const [rankingResult, totalResult] = await Promise.all([
-      supabaseClient
-        .from('palavras_chave')
-        .select('topico, quantidade, data_atualizacao')
-        .order('quantidade', { ascending: false })
-        .limit(CONFIG.maxKeywordsToShow),
-      supabaseClient
-        .from('palavras_chave')
-        .select('topico', { count: 'exact', head: true })
-    ]);
-
-    if (rankingResult.error) {
-      throw new Error(`Erro ao ler palavras-chave: ${rankingResult.error.message}`);
-    }
-
-    if (totalResult.error) {
-      throw new Error(`Erro ao contar palavras-chave: ${totalResult.error.message}`);
-    }
-
-    return {
-      ranking: rankingResult.data || [],
-      totalKeywords: Number(totalResult.count || 0)
-    };
-  }
-
-  function getFilledItems(items) {
-    return items.filter(item => String(item.mensagem || '').trim());
-  }
-
-  function updateDash(items) {
-    const total = items.length;
-
-    el.totalResponses.textContent = total;
-  }
-
-  function renderKeywords(ranking) {
-    if (!ranking.length) {
-      el.keywordsContainer.innerHTML =
-        '<div class="empty">Ainda não há palavras-chave suficientes para contabilizar.</div>';
-      el.keywordsStatus.textContent = 'Sem palavras-chave no momento.';
-      return;
-    }
-
-    const totalCount = ranking.reduce((sum, item) => sum + Number(item.quantidade || 0), 0) || 1;
-    const maxCount = Math.max(...ranking.map(item => Number(item.quantidade || 0)), 1);
-    const count = ranking.length;
-    const gap = 8;
-    const containerWidth = Math.max(el.keywordsContainer.clientWidth || 0, 320);
-    const containerHeight = Math.max(el.keywordsContainer.clientHeight || 0, 220);
-    const aspectRatio = containerWidth / Math.max(containerHeight, 1);
-    const columns = Math.max(1, Math.round(Math.sqrt(count * aspectRatio * 0.82)));
-    const rows = Math.max(1, Math.ceil(count / columns));
-    const cellWidth = (containerWidth - gap * (columns - 1)) / columns;
-    const cellHeight = (containerHeight - gap * (rows - 1)) / rows;
-    const maxDiameter = Math.max(112, Math.min(cellWidth, cellHeight) * 1.32);
-    const minDiameter = Math.max(86, maxDiameter * 0.8);
-
-    el.keywordsStatus.textContent = '';
-
-    el.keywordsContainer.innerHTML = ranking.map((item, index) => {
-      const count = Number(item.quantidade || 0);
-      const percent = (count / totalCount) * 100;
-      const strength = Math.sqrt(count / maxCount);
-      const bubbleSize = minDiameter + ((maxDiameter - minDiameter) * strength);
-      const opacity = Math.max(0.18, Math.min(0.18 + (percent / 140), 0.42));
-
-      return `
-        <div class="keyword-bubble" style="--bubble-size:${bubbleSize}px; --bubble-opacity:${opacity};" title="${escapeHtml(item.topico)}: ${count} (${percent.toFixed(1)}%)">
-          <div class="bubble-inner">
-            <div class="bubble-topic">${escapeHtml(item.topico)}</div>
-            <div class="bubble-percent">${percent.toFixed(1)}%</div>
-            <div class="bubble-count">${count} ${count === 1 ? 'vez' : 'vezes'}</div>
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  function onKeywordsResize() {
-    if (!lastKeywordsData.length) return;
-    if (resizeTimer) clearTimeout(resizeTimer);
-
-    resizeTimer = setTimeout(() => {
-      renderKeywords(lastKeywordsData);
-    }, 120);
-  }
-
-  function showLiveMessage(message, position, total) {
-    if (el.liveMessageKicker) {
-      el.liveMessageKicker.textContent = `ao vivo • mensagem ${position} de ${total}`;
-    }
-
-    if (el.liveMessageText) {
-      el.liveMessageText.textContent = message.mensagem || '';
-    }
-  }
-
-  function stopLiveRotation() {
-    if (liveTimer) {
-      clearInterval(liveTimer);
-      liveTimer = null;
-    }
-  }
-
-  function startLiveRotation(items) {
-    stopLiveRotation();
-    liveMessages = items.slice(0, 1);
-    liveIndex = 0;
-
-    if (!liveMessages.length) {
-      if (el.liveMessageKicker) el.liveMessageKicker.textContent = 'ao vivo';
-      if (el.liveMessageText) el.liveMessageText.textContent = 'Ainda não existem mensagens preenchidas.';
-      return;
-    }
-
-    if (el.liveMessageKicker) {
-      el.liveMessageKicker.textContent = 'ao vivo • última mensagem';
-    }
-    if (el.liveMessageText) {
-      el.liveMessageText.textContent = liveMessages[0].mensagem || '';
-    }
-  }
-
-  async function loadData() {
-    if (loading) return;
-    loading = true;
-
-    try {
-      const [messages, keywordsPayload] = await Promise.all([
-        fetchMessages(),
-        fetchKeywords()
-      ]);
-      const keywords = keywordsPayload.ranking || [];
-      const totalKeywords = keywordsPayload.totalKeywords || 0;
-
-      const filledItems = getFilledItems(messages);
-      const hash = buildHash(filledItems);
-      const keywordsHash = JSON.stringify((keywords || []).map(item => `${item.topico || ''}-${item.quantidade || 0}`));
-      const changed = hash !== lastHash;
-      lastHash = hash;
-      lastKeywordsData = keywords || [];
-
-      updateDash(filledItems);
-      if (el.keywordsCount) {
-        el.keywordsCount.textContent = String(totalKeywords);
-      }
-      if (keywordsHash !== lastKeywordsHash) {
-        lastKeywordsHash = keywordsHash;
-        renderKeywords(lastKeywordsData);
-      }
-
-      const shouldRestartLive = changed || !liveMessages.length;
-      if (shouldRestartLive) {
-        startLiveRotation(filledItems);
-      }
-
-      el.statusText.textContent = changed
-        ? 'Atualização automática ativa.'
-        : 'Aguardando novas mensagens.';
-    } catch (error) {
-      console.error(error);
-      stopLiveRotation();
-      el.responsesContainer.innerHTML = `<div class="error">${escapeHtml(error.message)}</div>`;
-      el.keywordsContainer.innerHTML = `<div class="error">${escapeHtml(error.message)}</div>`;
-      el.statusText.textContent = 'Erro na leitura das mensagens.';
-      el.keywordsStatus.textContent = 'Erro na leitura das palavras-chave.';
-    } finally {
-      loading = false;
-    }
-  }
-
-  function startAutoRefresh() {
-    if (refreshTimer) clearInterval(refreshTimer);
-    refreshTimer = setInterval(loadData, CONFIG.refreshSeconds * 1000);
-  }
-
-  loadData();
-  startAutoRefresh();
-  window.addEventListener('resize', onKeywordsResize);
-</script>
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 IA Serviços - Positivo Tecnologia. Todos os direitos reservados.</p>
+    </footer>
 </body>
 </html>
